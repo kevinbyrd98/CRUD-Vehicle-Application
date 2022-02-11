@@ -1,0 +1,4 @@
+C:\Users\kevin\Desktop\Projects\Vehicle CRUD App\BackendAPITests1\obj\Debug\netcoreapp3.1\BackendAPITests.csprojAssemblyReference.cache
+C:\Users\kevin\Desktop\Projects\Vehicle CRUD App\BackendAPITests1\obj\Debug\netcoreapp3.1\BackendAPITests.AssemblyInfoInputs.cache
+C:\Users\kevin\Desktop\Projects\Vehicle CRUD App\BackendAPITests1\obj\Debug\netcoreapp3.1\BackendAPITests.AssemblyInfo.cs
+C:\Users\kevin\Desktop\Projects\Vehicle CRUD App\BackendAPITests1\obj\Debug\netcoreapp3.1\BackendAPITests.csproj.CoreCompileInputs.cache
