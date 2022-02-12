@@ -1,6 +1,7 @@
 ﻿using BackendAPI.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using BackendAPI.Models;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -38,18 +39,40 @@ namespace BackendAPI.Controllers
 
 
         [HttpGet]
-        public void GetVehicles()
+        public async Task<ActionResult> GetVehicles()
         {
+            try
+            {
+                var vehicles = _vehicleRepository.GetVehicles();
 
+                return Ok(vehicles);
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occured while retriveing vehicles");
+            }
         }
 
-        /*
+        
         [HttpPost]
-        public Task<ActionResult> CreateVehicle()
+        public async Task<ActionResult> CreateVehicle(Vehicle vehicle)
         {
+            if (vehicle is null)
+                return BadRequest("No vehicle was provided");
 
+            try
+            {
+                _vehicleRepository.CreateVehicle(vehicle);
+
+                return Ok();
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occured while adding this vehicle");
+            }
         }
-
+        
+        /*
         [HttpPut]
         public Task<ActionResult> UpdateVehicle()
         {

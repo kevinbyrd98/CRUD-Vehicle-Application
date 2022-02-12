@@ -8,13 +8,13 @@ namespace BackendAPI.Repositories
 {
     public class VehicleRepository : IVehicleRepository
     {
-        public Vehicle[] vehicles { get; set; }
+        public List<Vehicle> vehicles { get; set; }
 
         public Vehicle GetById(int id)
         {
             try
             {
-                var vehicle = Array.Find(vehicles, vehicle => vehicle.ID == id);
+                var vehicle = vehicles.Find(v => v.ID == id);
                 
                 return vehicle;
 
@@ -24,9 +24,21 @@ namespace BackendAPI.Repositories
             }
         }
 
-        public Vehicle[] GetVehicles()
+        public List<Vehicle> GetVehicles()
         {
             return vehicles;
+        }
+
+        public void CreateVehicle(Vehicle vehicle)
+        {
+            try
+            {
+                vehicles.Add(vehicle);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
     }
 }

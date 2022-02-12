@@ -1,10 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using BackendAPI.Controllers;
 using BackendAPI.Repositories;
 using System;
 using BackendAPI.Models;
 using System.Collections.Generic;
-using System.Text;
 using Moq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
@@ -69,10 +67,85 @@ namespace BackendAPI.Controllers.Tests
         [TestMethod()]
         public void GetVehicles_ShouldReturn200OK()
         {
-            InitializeController();
+            
             InitializeDependencies();
+            InitializeController();
 
-            var vehicles = []
+            var vehicleList = new List<Vehicle> { 
+                new Vehicle
+                {
+                    ID = 1
+                },
+                new Vehicle
+                {
+                    ID = 2
+                }
+            };
+           
+            _repository.Setup(repo => repo.GetVehicles()).Returns(vehicleList);
+
+            var result = _controller.GetVehicles();
+
+            var vehicles = (List<Vehicle>)((ObjectResult)result.Result).Value;
+
+            Assert.AreEqual(vehicleList, vehicles);
+        }
+
+        [TestMethod()]
+        public void GetVehicles_ShouldReturn500InternalServerError()
+        {
+            InitializeDependencies();
+            InitializeController();
+
+            _repository.Setup(repo => repo.GetVehicles()).Throws<Exception>();
+
+            var result = _controller.GetVehicles();
+
+            var actionResult = (ObjectResult)result.Result;
+            Assert.AreEqual(StatusCodes.Status500InternalServerError, actionResult.StatusCode);
+        }
+
+        [TestMethod()]
+        public void CreateVehicle_ShouldReturn201Created()
+        {
+            InitializeDependencies();
+            InitializeController();
+
+            _repository.Setup(repo => repo.CreateVehicle(It.IsAny<Vehicle>()));
+
+            var result = _controller.CreateVehicle(new Vehicle());
+
+            var actionResult = (OkResult)result.Result;
+
+            Assert.AreEqual(StatusCodes.Status200OK, actionResult.StatusCode);
+        }
+
+        [TestMethod()]
+        public void CreateVehicle_ShouldReturn400BadRequest()
+        {
+            InitializeDependencies();
+            InitializeController();
+
+            var result = _controller.CreateVehicle(null);
+
+            var actionResult = (ObjectResult)result.Result;
+
+            Assert.AreEqual(StatusCodes.Status400BadRequest, actionResult.StatusCode);
+        }
+
+        [TestMethod()]
+        public void CreateVehicle_ShouldReturn500InternalServerError()
+        {
+            InitializeDependencies();
+            InitializeController();
+
+            _repository.Setup(repo => repo.CreateVehicle(It.IsAny<Vehicle>())).Throws<Exception>();
+
+            var result = _controller.CreateVehicle(new Vehicle());
+
+            var actionResult = (ObjectResult)result.Result;
+
+            Assert.AreEqual(StatusCodes.Status500InternalServerError, actionResult.StatusCode);
         }
 
         private void InitializeController()
