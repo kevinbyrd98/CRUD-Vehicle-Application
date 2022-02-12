@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BackendAPI.Repositories;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -11,31 +13,37 @@ namespace BackendAPI.Controllers
     [Route("api/[controller]")]
     public class VehicleController : ControllerBase
     {
-        private static readonly string[] Summaries = new[]
-        {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
+        private readonly IVehicleRepository _vehicleRepository;
 
-        private readonly ILogger<VehicleController> _logger;
-
-        public VehicleController(ILogger<VehicleController> logger)
+        public VehicleController(IVehicleRepository vehicleRepository)
         {
-            _logger = logger;
+            _vehicleRepository = vehicleRepository;
         }
 
         [HttpGet]
-        public Task<ActionResult<VehicleDto>> GetVehicle(int vehicleId)
+        public async Task<ActionResult> GetVehicle(int vehicleId)
         {
             if (vehicleId <= 0)
-                return BadRequest("A valid vehicle ID was not provided");
+                return BadRequest("Valid vehicle Id not provided");
+            try
+            {
+                var vehicle = _vehicleRepository.GetById(vehicleId);
+
+                return Ok(vehicle);
+            }catch 
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occured while retriveing vehicle");
+            }
         }
 
+
         [HttpGet]
-        public Task<ActionResult> GetVehicles()
+        public void GetVehicles()
         {
 
         }
 
+        /*
         [HttpPost]
         public Task<ActionResult> CreateVehicle()
         {
@@ -52,6 +60,6 @@ namespace BackendAPI.Controllers
         public Task<ActionResult> DeleteVehicle()
         {
 
-        }
+        }*/
     }
 }

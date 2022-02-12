@@ -23,5 +23,10 @@ namespace BackendAPI.Repositories
                 throw e;
             }
         }
+
+        public Vehicle[] GetVehicles()
+        {
+            return vehicles;
+        }
     }
 }
