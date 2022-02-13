@@ -40,5 +40,17 @@ namespace BackendAPI.Repositories
                 throw e;
             }
         }
+
+        public void UpdateVehicle(Vehicle vehicle, Vehicle vehicleToUpdate)
+        {
+            var index = vehicles.IndexOf(vehicleToUpdate);
+
+            vehicles[index] = vehicle;
+        }
+
+        public void DeleteVehicle(int Id)
+        {
+            vehicles = vehicles.Where(v => v.ID != Id).ToList();
+        }
     }
 }

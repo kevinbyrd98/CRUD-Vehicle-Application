@@ -22,7 +22,7 @@ namespace BackendAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetVehicle(int vehicleId)
+        public ActionResult GetVehicle(int vehicleId)
         {
             if (vehicleId <= 0)
                 return BadRequest("Valid vehicle Id not provided");
@@ -37,9 +37,8 @@ namespace BackendAPI.Controllers
             }
         }
 
-
         [HttpGet]
-        public async Task<ActionResult> GetVehicles()
+        public ActionResult GetVehicles()
         {
             try
             {
@@ -52,10 +51,9 @@ namespace BackendAPI.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "An error occured while retriveing vehicles");
             }
         }
-
         
         [HttpPost]
-        public async Task<ActionResult> CreateVehicle(Vehicle vehicle)
+        public ActionResult CreateVehicle(Vehicle vehicle)
         {
             if (vehicle is null)
                 return BadRequest("No vehicle was provided");
@@ -72,17 +70,42 @@ namespace BackendAPI.Controllers
             }
         }
         
-        /*
+        
         [HttpPut]
-        public Task<ActionResult> UpdateVehicle()
+        public ActionResult UpdateVehicle(Vehicle vehicle)
         {
+            if(vehicle is null)
+                return BadRequest("No vehicle provided");
 
+            try
+            {
+                var vehicleToUpdate = _vehicleRepository.GetById(vehicle.ID);
+
+                _vehicleRepository.UpdateVehicle(vehicle, vehicleToUpdate);
+
+                return Ok();
+            }catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error has occured while updating vehicle");
+            }
         }
 
-        [HttpDelete]
-        public Task<ActionResult> DeleteVehicle()
-        {
 
-        }*/
+        [HttpDelete]
+        public ActionResult DeleteVehicle(int ID)
+        {
+            if (ID <= 0)
+                return BadRequest("Invalid vehicle ID");
+            try
+            {
+                _vehicleRepository.DeleteVehicle(ID);
+
+                return Ok();
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occured while deleting vehicle");
+            }
+        }
     }
 }
