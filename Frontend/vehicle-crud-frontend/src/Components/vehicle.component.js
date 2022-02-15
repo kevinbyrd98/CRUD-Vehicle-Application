@@ -75,7 +75,7 @@ class Vehicle extends Component{
     }
     updateContent() {
         this.props
-          .updateTutorial(this.state.currentVehicle.id, this.state.currentVehicle)
+          .updateVehicle(this.state.currentVehicle.id, this.state.currentVehicle)
           .then((reponse) => {
             console.log(reponse);
             
